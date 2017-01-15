@@ -1,0 +1,9 @@
+{% if thirdparty_list %}
+    <ul>
+    {% for thirdparty in thirdparty_list %}
+        <li><a href="{{ thirdparty.id }}">{{ thirdparty.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No thirdparties are available.</p>
+{% endif %}
