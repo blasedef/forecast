@@ -1,0 +1,22 @@
+{% extends "forecast/base.html" %}
+
+{% block title %}Add new third party{% endblock %}
+
+{% block content %}
+
+{% if thirdParty_list %}
+    <ul>
+    {% for thirdParty in thirdParty_list %}
+        <li><a href="{{ thirdParty.id }}">{{ thirdParty.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No thirdparties are available.</p>
+{% endif %}
+
+<form action="." method="post">
+	{{ thirdPartyForm.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Add Third Party"></p>
+</form>
+{% endblock %}

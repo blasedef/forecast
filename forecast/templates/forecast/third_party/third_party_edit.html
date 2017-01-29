@@ -1,0 +1,13 @@
+{% extends "forecast/base.html" %}
+
+{% block title %}{{ title }} third party {% endblock %}
+
+{% block content %}
+<form action="{{thirdParty_id}}" method="post">
+	{{ thirdPartyForm.as_table }}
+    {% csrf_token %}
+    <p><input type="submit" name="save" value="Save Third Party"></p>
+    <p><input type="submit" name="delete" value="Delete Third Party"></p>
+</form>
+<a href="../new/">New third party</a>
+{% endblock %}

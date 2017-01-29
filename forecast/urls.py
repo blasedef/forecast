@@ -3,7 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^thirdparty/$', views.thirdparty, name='thirdparty'),
-    url(r'^thirdparty/(?P<thirdparty_id>[0-9]+)$', views.thirdparty_edit, name='thirdparty_edit')
+    url(r'^third_party/list/$', views.thirdPartyList, name='thirdPartyList'),
+    url(r'^third_party/new/$', views.thirdPartyNew, name='thirdPartyEdit'),
+    url(r'^third_party/(?P<thirdParty_id>[0-9]+)$', views.thirdPartyEdit, name='thirdPartyEdit')
 ]

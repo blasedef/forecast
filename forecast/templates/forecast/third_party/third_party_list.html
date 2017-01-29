@@ -1,0 +1,19 @@
+{% extends "forecast/base.html" %}
+
+{% block title %}List third parties{% endblock %}
+
+{% block content %}
+
+{% if thirdPartyList %}
+    <ul>
+    {% for thirdParty in thirdPartyList %}
+        <li><a href="../{{ thirdParty.id }}">{{ thirdParty.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No thirdparties are available.</p>
+{% endif %}
+
+<a href="../new/">New third party</a>
+
+{% endblock %}

@@ -1,22 +1,72 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render
-from .models import Thirdparty
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
+from .models import ThirdParty
+from .forms import ThirdPartyForm
 
 # Create your views here.
+def thirdPartyList(request):
+	thirdPartyList = ThirdParty.objects.all()
 
-def index(request):
-	context = {'hello':'Hello world!'}
-	return render(request, 'forecast/index.html', context)
+	if request.method == 'GET':
+		thirdPartyForm = ThirdPartyForm()
+	else:
+		thirdPartyForm = ThirdPartyForm(data=request.POST)
+		if thirdPartyForm.is_valid():
+			thirdParty = thirdPartyForm.save(commit=False)
+			thirdParty.save()
 
-def thirdparty(request):
-	thirdparty_list = Thirdparty.objects.order_by('name')
-	context = {'thirdparty_list': thirdparty_list}
-	return render(request, 'forecast/thirdparty/thirdparty.html', context)
+	context = {\
+				'thirdPartyList': thirdPartyList,\
+				'thirdPartyForm': thirdPartyForm,\
+				}\
 
-def thirdparty_edit(request, thirdparty_id):
-	try:
-		thirdparty = Thirdparty.objects.get(pk=thirdparty_id)
-	except Thirdparty.DoesNotExist:
-		raise Http404("Thirdparty does not exist")
-	return render(request, 'forecast/thirdparty/thirdparty_edit.html', {'thirdparty': thirdparty })
+	return render(request, 'forecast/third_party/third_party_list.html', context)
+
+
+def thirdPartyEdit(request, thirdParty_id=None):
+
+	html = 'forecast/third_party/third_party_edit.html'
+	title = "Edit"
+	thirdParty = get_object_or_404(ThirdParty, id=thirdParty_id)
+	method = request.method	
+
+	if method == 'GET':
+		thirdPartyForm = ThirdPartyForm(instance=thirdParty)
+		context = {'title': title, 'thirdPartyForm': thirdPartyForm}
+		return render(request,html,context)
+
+	else:
+		data=request.POST
+		thirdPartyForm = ThirdPartyForm(data=data, instance=thirdParty)
+		thirdParty_id = thirdParty.id
+
+		if 'delete' in data:
+			thirdParty.delete()
+			return redirect('/forecast/third_party/list/')
+		else:
+			if thirdPartyForm.is_valid():
+				thirdParty = thirdPartyForm.save(commit=False)
+				if 'save' in data:
+					thirdParty.save()
+					return redirect('/forecast/third_party/list/')	
+
+def thirdPartyNew(request):
+
+	html = 'forecast/third_party/third_party_new.html'
+	title = "New"
+	method = request.method	
+
+	if method == 'GET':
+		thirdPartyForm = ThirdPartyForm()
+		context = {'title': title, 'thirdPartyForm': thirdPartyForm}
+		return render(request,html,context)
+
+	else:
+		data=request.POST
+		thirdPartyForm = ThirdPartyForm(data=data)
+		if thirdPartyForm.is_valid():
+			if 'save' in data:
+				thirdParty = thirdPartyForm.save(commit=False)
+				thirdParty.save()
+				return redirect('/forecast/third_party/list/')	
